@@ -1,0 +1,234 @@
+{
+    "version": "1.3",
+    "canvas_edge": [
+        60,
+        174
+    ],
+    "node": [
+        {
+            "token": "unused",
+            "x": 18472494000000008,
+            "y": 20320457000000047
+        }
+    ],
+    "line": [    
+        {
+            "token": "unused",
+            "node_tokens": [
+              "unused",
+              "unused",
+              "unused",
+              "unused"
+            ]
+        }
+    ],
+    "polygon": [
+        {
+            "token": "unused",
+            "exterior_node_tokens": [
+                "unused",
+                "unused",
+                "unused",
+                "unused",
+                "unused"
+            ],
+            "holes": []
+        }
+    ],
+    "ped_crossing": [
+        {
+            "token": "unused",
+            "polygon_token": "unused",
+            "road_segment_token": null
+        }
+    ],
+    "road_segment": [
+        {
+          "token": "unused",
+          "polygon_token":"unused",
+          "is_intersection": true,
+          "drivable_area_token": ""
+        }
+    ],
+    "lane": [
+        {
+          "token": "unused",
+          "polygon_token": "unused",
+          "lane_type": "CAR",
+          "from_edge_line_token": "unused",
+          "to_edge_line_token": "unused",
+          "left_lane_divider_segments": [
+            {
+              "node_token": "unused",
+              "segment_type": "DOUBLE_DASHED_WHITE"
+            },
+            {
+              "node_token": "unused",
+              "segment_type": "DOUBLE_DASHED_WHITE"
+            },
+            {
+              "node_token": "unused",
+              "segment_type": "DOUBLE_DASHED_WHITE"
+            },
+            {
+              "node_token": "unused",
+              "segment_type": "DOUBLE_DASHED_WHITE"
+            }
+          ],
+          "right_lane_divider_segments": []
+        }
+    ],
+    "road_divider": [
+        {
+          "token": "unused",
+          "line_token": "unused",
+          "road_segment_token": null
+        }
+    ],
+    "lane_divider": [
+        {
+          "token": "unused",
+          "line_token": "unused",
+          "lane_divider_segments": [
+            {
+              "node_token": "unused",
+              "segment_type": "DOUBLE_DASHED_WHITE"
+            }
+          ]
+        }
+    ],
+
+
+
+    "road_block": [
+        {
+          "token": "unused",
+          "polygon_token": "unused",
+          "from_edge_line_token": "unused",
+          "to_edge_line_token": "unused",
+          "road_segment_token": "unused"
+        }
+    ],
+    "drivable_area": [
+        {
+            "token": "unused",
+            "polygon_token":"unused",
+            "road_segment_token": null
+        }
+    ],
+    "walkway": [
+        {
+          "token": "unused",
+          "polygon_token": "unused"
+        }
+    ],
+    "stop_line": [
+        {
+          "token": "unused",
+          "polygon_token": "unused",
+          "stop_line_type": "STOP_SIGN",
+          "ped_crossing_tokens": [],
+          "traffic_light_tokens": [],
+          "road_block_token": "unused"
+        }
+    ],
+    "carpark_area": [],
+    "traffic_light": [
+        {
+          "token": "unused",
+          "line_token": "unused",
+          "traffic_light_type": "VERTICAL",
+          "from_road_block_token": "unused",
+          "items": [
+            {
+              "color": "RED",
+              "shape": "CIRCLE",
+              "rel_pos": {
+                "tx": 0.0,
+                "ty": 0.0,
+                "tz": 0.0,
+                "rx": null,
+                "ry": null,
+                "rz": null
+              },
+              "to_road_block_tokens": []
+            },
+            {
+              "color": "YELLOW",
+              "shape": "CIRCLE",
+              "rel_pos": {
+                "tx": 0.0,
+                "ty": 0.0,
+                "tz": 0.0,
+                "rx": null,
+                "ry": null,
+                "rz": null
+              },
+              "to_road_block_tokens": []
+            },
+            {
+              "color": "GREEN",
+              "shape": "CIRCLE",
+              "rel_pos": {
+                "tx": 0.0,
+                "ty": 0.0,
+                "tz": 0.0,
+                "rx": null,
+                "ry": null,
+                "rz": null
+              },
+              "to_road_block_tokens": []
+            }
+          ],
+          "pose": {
+            "tx": 0.0,
+            "ty": 0.0,
+            "tz": 2.4,
+            "rx": 0.0,
+            "ry": 0.0,
+            "rz": 0.0
+          }
+        }
+    ],
+
+
+    "arcline_path_3": {
+        "unused": [
+          {
+            "start_pose": [
+              11693665125060993,
+              12821674728661665,
+              17785210304272798
+            ],
+            "end_pose": [
+              11592420800538075,
+              1328758413839515,
+              17988218487570533
+            ],
+            "shape": "LSL",
+            "radius": 999999,
+            "segment_length": [
+              33636941771581457,
+              27378115067139017,
+              16937103851797012
+            ]
+          }
+        ]
+    },
+    "connectivity": {
+        "unused": {
+          "incoming": [
+            "unused"
+          ],
+          "outgoing": [
+            "unused"
+          ]
+        }
+    },
+    "lane_connector": [
+        {
+          "token": "unused",
+          "polygon_token": "unused"
+        }
+    ]
+}
