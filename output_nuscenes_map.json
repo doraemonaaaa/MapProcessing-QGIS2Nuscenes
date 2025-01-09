@@ -159,6 +159,46 @@
             "token": "23e2a37e-7497-442f-ac2d-66a6c76b59c6",
             "x": -5.96014895,
             "y": 1.0862155000000016
+        },
+        {
+            "token": "73d28893-7c0b-41b3-84ee-9f1b582c00ec",
+            "x": 1.8472494000000008,
+            "y": 2.0320457000000047
+        },
+        {
+            "token": "51cb4a4a-e51f-4e50-8974-892893c10dad",
+            "x": 2.6383074000000004,
+            "y": 1.997651850000004
+        },
+        {
+            "token": "765c5d19-0a01-4ae8-b05c-ac0b677d59a1",
+            "x": 2.7070950499999995,
+            "y": -1.9060472999999973
+        },
+        {
+            "token": "9827c9b6-3bc3-41fa-b9ca-7a66b71728c6",
+            "x": 1.9676278000000007,
+            "y": -1.95763805
+        },
+        {
+            "token": "8b17a811-37ea-470a-a548-f89f0103f1cf",
+            "x": -4.9971217999999995,
+            "y": 1.034624749999999
+        },
+        {
+            "token": "ca2e3d3e-d2da-4a4f-8cfb-b46e95aef183",
+            "x": -5.083106399999999,
+            "y": -0.031583849999989866
+        },
+        {
+            "token": "55cad1b0-04d6-4b3d-a49d-b6ce6f6d7b5f",
+            "x": -5.96014895,
+            "y": -0.031583849999989866
+        },
+        {
+            "token": "70598ae9-9047-4cd7-a6af-98b70d2c43bf",
+            "x": -5.96014895,
+            "y": 1.0862155000000016
         }
     ],
     "line": [],
@@ -250,6 +290,28 @@
                 "9bd10602-f7fc-4ffe-8b5d-9d015c83ae5b"
             ],
             "holes": []
+        },
+        {
+            "token": "d4dd72bb-bd08-4626-b4da-00a581af720b",
+            "exterior_node_tokens": [
+                "73d28893-7c0b-41b3-84ee-9f1b582c00ec",
+                "51cb4a4a-e51f-4e50-8974-892893c10dad",
+                "765c5d19-0a01-4ae8-b05c-ac0b677d59a1",
+                "9827c9b6-3bc3-41fa-b9ca-7a66b71728c6",
+                "73d28893-7c0b-41b3-84ee-9f1b582c00ec"
+            ],
+            "holes": []
+        },
+        {
+            "token": "64871ab1-a9dd-40f5-861a-67de49d96db1",
+            "exterior_node_tokens": [
+                "8b17a811-37ea-470a-a548-f89f0103f1cf",
+                "ca2e3d3e-d2da-4a4f-8cfb-b46e95aef183",
+                "55cad1b0-04d6-4b3d-a49d-b6ce6f6d7b5f",
+                "70598ae9-9047-4cd7-a6af-98b70d2c43bf",
+                "8b17a811-37ea-470a-a548-f89f0103f1cf"
+            ],
+            "holes": []
         }
     ],
     "ped_crossing": [
@@ -292,10 +354,20 @@
             "token": "402dbc58-f87a-4a20-be98-0cf5e6145e63",
             "polygon_token": "ff688181-46de-4e98-9572-2b8da97da12f",
             "road_segment_token": null
+        },
+        {
+            "token": "80b89a27-2e5e-4282-bbe6-57f96bc78203",
+            "polygon_token": "d4dd72bb-bd08-4626-b4da-00a581af720b",
+            "road_segment_token": null
+        },
+        {
+            "token": "449ffafa-8466-4a73-9d04-b251256d8c5b",
+            "polygon_token": "64871ab1-a9dd-40f5-861a-67de49d96db1",
+            "road_segment_token": null
         }
     ],
     "canvas_edge": [
-        60.0,
-        174.0
+        30.0,
+        87.0
     ]
 }

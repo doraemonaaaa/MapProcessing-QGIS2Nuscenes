@@ -1,8 +1,8 @@
 {
   "version": "1.3",
   "canvas_edge": [
-      60,
-      174
+      30,
+      87
   ],
   "node": [
       {
@@ -35,8 +35,6 @@
       {
           "token": "unused",
           "node_tokens": [
-            "unused",
-            "unused",
             "unused",
             "unused"
           ]

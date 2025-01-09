@@ -257,8 +257,8 @@ class Geojson2Nuscenesjson:
             if data:  # 仅添加非空的语义层
                 nuscenes_map[layer] = data
 
-        # 添加canvas_edge到NuScenesMap结构中
-        canvas_edge = [self.image_width / 10.0, self.image_height / 10.0]
+        # 添加canvas_edge（真实尺寸）到NuScenesMap结构中
+        canvas_edge = [self.image_width * self.resolution, self.image_height  * self.resolution]
         nuscenes_map['canvas_edge'] = canvas_edge
 
         return nuscenes_map
