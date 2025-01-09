@@ -1,9 +1,5 @@
 {
     "version": "1.3",
-    "canvas_edge": [
-        30,
-        87
-    ],
     "node": [
         {
             "token": "unused",

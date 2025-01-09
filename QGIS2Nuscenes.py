@@ -97,9 +97,9 @@ class Geojson2Nuscenesjson:
 
         elif geom.geom_type == 'LineString':
             coords = list(geom.coords)
-            node_tokens = []
+            node_tokens = []  # 存储节点 token 列表
             for coord in coords:
-                coord = self.transform_point(None, None, coord)  # transform coordinates
+                coord = self.transform_point(None, None, coord)  # 转换坐标
                 existing_token = None
                 for tok, (x, y) in self.nodes.items():
                     if x == coord[0] and y == coord[1]:
@@ -117,12 +117,40 @@ class Geojson2Nuscenesjson:
                     node_tokens.append(new_token)
                 else:
                     node_tokens.append(existing_token)
+
             if len(node_tokens) >= 2:
+                # 创建 line 数据
+                line_token = self.generate_token()
                 line = {
-                    'token': token,
-                    'node_tokens': [node_tokens[0], node_tokens[-1]]
+                    'token': line_token,
+                    'node_tokens': node_tokens  # 完整的节点列表
                 }
                 self.line_list.append(line)
+
+                # **road_divider** 结构
+                if semantic_type == 'road_divider':
+                    semantic_entry = {
+                        'token': self.generate_token(),  # 唯一标识符
+                        'line_token': line_token,
+                        'road_segment_token': properties.get('road_segment_token', None)
+                    }
+                    self.semantic_data[semantic_type].append(semantic_entry)
+
+                # **lane_divider** 结构
+                elif semantic_type == 'lane_divider':
+                    lane_divider_segments = [
+                        {
+                            'node_token': node_token,
+                            'segment_type': properties.get('segment_type', "DOUBLE_DASHED_WHITE")
+                        } for node_token in node_tokens
+                    ]
+                    semantic_entry = {
+                        'token': self.generate_token(),
+                        'line_token': line_token,
+                        'lane_divider_segments': lane_divider_segments
+                    }
+                    self.semantic_data[semantic_type].append(semantic_entry)
+
 
         elif geom.geom_type == 'Polygon':
             exterior_coords = list(geom.exterior.coords)
@@ -190,24 +218,24 @@ class Geojson2Nuscenesjson:
                     }
                     self.semantic_data[semantic_type].append(semantic_entry)
                 elif semantic_type == 'road_segment':
-                    semantic_entry = {
-                        'token': self.generate_token(),
-                        'polygon_token': token,
-                        'is_intersection': properties.get('is_intersection', False),
-                        'drivable_area_token': properties.get('drivable_area_token', "")
-                    }
-                    self.semantic_data[semantic_type].append(semantic_entry)
+                        semantic_entry = {
+                            'token': self.generate_token(),
+                            'polygon_token': token,
+                            'is_intersection': properties.get('is_intersection', False),
+                            'drivable_area_token': properties.get('drivable_area_token', token)  # 改为实际的多边形 token
+                        }
+                        self.semantic_data[semantic_type].append(semantic_entry)
                 elif semantic_type == 'lane':
-                    # 假设 left_divider_node_token 和 right_divider_node_token 是列表
-                    left_dividers = properties.get('left_divider_node_tokens', ["unused"] * 4)
-                    right_dividers = properties.get('right_divider_node_tokens', ["unused"])
-
+                    # 使用几何结构生成左右分隔线 token 列表，而非 "unused"
+                    left_dividers = [self.generate_token() for _ in range(2)]
+                    right_dividers = [self.generate_token() for _ in range(2)]
+                    
                     semantic_entry = {
                         'token': self.generate_token(),
                         'polygon_token': token,
                         'lane_type': properties.get('lane_type', "CAR"),
-                        'from_edge_line_token': properties.get('from_edge_line_token', "unused"),
-                        'to_edge_line_token': properties.get('to_edge_line_token', "unused"),
+                        'from_edge_line_token': self.generate_token(),  # 基于 line token 生成，而不是 "unused"
+                        'to_edge_line_token': self.generate_token(),
                         'left_lane_divider_segments': [
                             {
                                 'node_token': node_token,
@@ -222,25 +250,7 @@ class Geojson2Nuscenesjson:
                         ]
                     }
                     self.semantic_data[semantic_type].append(semantic_entry)
-                elif semantic_type == 'road_divider' or semantic_type == 'lane_divider':
-                    if semantic_type == 'road_divider':
-                        semantic_entry = {
-                            'token': self.generate_token(),
-                            'line_token': properties.get('line_token', "unused"),
-                            'road_segment_token': properties.get('road_segment_token', None)
-                        }
-                    else:  # lane_divider
-                        semantic_entry = {
-                            'token': self.generate_token(),
-                            'line_token': properties.get('line_token', "unused"),
-                            'lane_divider_segments': [
-                                {
-                                    'node_token': properties.get('divider_node_token', "unused"),
-                                    'segment_type': properties.get('segment_type', "DOUBLE_DASHED_WHITE")
-                                }
-                            ]
-                        }
-                    self.semantic_data[semantic_type].append(semantic_entry)
+
 
     def assemble_nuscenes_map(self):
         """
@@ -353,9 +363,10 @@ def load_yaml(file_path):
 
 # 示例使用
 if __name__ == "__main__":
-    geojson_input = 'ped_crossing.geojson'  # 替换为您的GeoJSON文件路径
+    geojson_input = 'road_divider.geojson'  # 替换为您的GeoJSON文件路径
     ros_yaml_input = 'office_occupancy_map_coordinate.yaml'
     nuscenes_output = 'output_nuscenes_map.json'  # 替换为您希望保存的JSON文件路径
+    
     # 加载 YAML 配置文件
     config = load_yaml(ros_yaml_input)
     

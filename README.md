@@ -27,6 +27,9 @@ QGIS2Nuscenes map format
         - Divider（分割）：通过nuscenes的'road_divider', 'lane_divider'得来
         - Ped_crossing（人行路）：通过nuscenes的'ped_crossing'得来
 
+### RobotAD
+    ## RobotAD主要关注boundary，所以标注contour类型，contour类型中选取road_divider，仅road_divider会被标注(line type)
+
 ### geojson转换nuscenes的格式
     ## nuscenes的几何格式：
         - node: 最基础的元素，包含x,y坐标信息
