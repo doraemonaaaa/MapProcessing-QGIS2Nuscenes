@@ -7,10 +7,13 @@ import numpy as np
 import yaml
 from PIL import Image  # 用于读取图像
 import os
+import math
 
+# x, y
+ros2issac_axis_mapping = (180, 180)
 
 class Geojson2Nuscenesjson:
-    def __init__(self, resolution, origin, image_height, image_width):
+    def __init__(self, resolution, origin, image_height, image_width, axis_mapping=ros2issac_axis_mapping):
         """
         初始化语义层和数据结构。
         参数:
@@ -36,28 +39,47 @@ class Geojson2Nuscenesjson:
         self.image_height = image_height
         self.image_width = image_width
         self.origin_x, self.origin_y, _ = self.origin  # 提取 origin_x 和 origin_y
+        
+        # 用于将qgis的坐标系方向对齐到issac的坐标系方向，角度顺时针为正旋转，数据结构：(x轴旋转方向，y轴旋转方向)，进行qgis->ros->issac or real_world
+        # - qgis默认x右y下，图片左上角
+        # - ROS默认x右y上，图片左下角
+        # - issac或者real world随机
+        # axis_mapping 用于 ros -> issac 坐标系方向
+        self.axis_mapping = axis_mapping
 
     def transform_point(self, x, y, coord):
         """
         将 QGIS 坐标系转换为 ROS 的 origin 坐标系。
+        再将 ROS 坐标转换为 Issac 或 real world 坐标（基于 self.axis_mapping）。
         - QGIS：Y 轴向下，左上角为原点
         - ROS：Y 轴向上，左下角为原点
         - 真实的 pose（米为单位）用 pixel 乘以 ros 的 resolution
         - ROS坐标系原点转到origin
+        - ROS--->Issac或者real world的coordinate方向
         """
         if coord:
             x_qgis, y_qgis = coord
         else:
             x_qgis, y_qgis = x, y
+        ### Step 1: QGIS -> ROS
         # 翻转 Y 轴（QGIS 的 Y 轴向下，ROS 的 Y 轴向上）
         y_flipped = self.image_height + y_qgis
         # 像素转换到实际世界尺度
         x_ros = x_qgis * self.resolution
         y_ros = y_flipped * self.resolution
         # 将 ROS 坐标系原点移到 origin, origin是真实尺度
-        x_real = x_ros - self.origin_x
-        y_real = y_ros - self.origin_y
-        return [x_real, y_real]
+        x_ros_real = x_ros - self.origin_x
+        y_ros_real = y_ros - self.origin_y
+        
+        ### Step 2: ROS -> Issac/real world
+        # 应用 self.axis_mapping（角度旋转）
+        x_rotation, y_rotation = self.axis_mapping  # 获取 X 和 Y 轴的旋转角度（以度为单位）
+        theta_x = math.radians(x_rotation)  # 将角度转换为弧度
+        theta_y = math.radians(y_rotation)  # 将角度转换为弧度
+        # 应用旋转矩阵公式
+        x_transformed = x_ros_real * math.cos(theta_x) - y_ros_real * math.sin(theta_x)
+        y_transformed = x_ros_real * math.sin(theta_y) + y_ros_real * math.cos(theta_y)
+        return [x_transformed, y_transformed]
 
     def generate_token(self):
         """

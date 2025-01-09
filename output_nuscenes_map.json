@@ -1,389 +1,53 @@
 {
-    "version": "1.3",
     "node": [
         {
-            "token": "unused",
-            "x": 18472494000000008,
-            "y": 20320457000000047
+            "token": "55a17ba7-8e94-42e3-bf82-2474a63a05a9",
+            "x": 3.6808060499999997,
+            "y": -1.2762379000000057
         },
         {
-            "token": "dd66eee4-00d2-4ac2-86b3-94bb327a1d64",
-            "x": 1.8782628500000005,
-            "y": 1.9849437999999964
+            "token": "41fde9b7-5e8f-49d7-8365-5d71b926a4d9",
+            "x": 2.997231599999999,
+            "y": -1.2762379000000057
         },
         {
-            "token": "4a296676-2c7f-491c-8476-dd40a2c0236b",
-            "x": 1.8782628500000005,
-            "y": 0.7585307499999985
+            "token": "fa89225c-fd21-46c2-975e-3656a3cb4c43",
+            "x": 3.6808060499999997,
+            "y": -1.2762379000000057
         },
         {
-            "token": "76fcf8db-86f9-4d7c-9cfb-9331a01c7eee",
-            "x": 1.7727109000000008,
-            "y": 0.7333993500000062
-        },
-        {
-            "token": "a24f4b4b-09ff-4377-b937-6cfd06ef17f0",
-            "x": 1.782763450000001,
-            "y": -0.6387758999999917
-        },
-        {
-            "token": "dfb47d1d-0751-480c-80e8-310a7b15612d",
-            "x": 1.8782628500000005,
-            "y": -0.6438022000000032
-        },
-        {
-            "token": "9700a5c6-a5a4-45be-9605-02ff770ab8ef",
-            "x": 1.8782628500000005,
-            "y": -1.9003729000000007
-        },
-        {
-            "token": "3f48b8aa-4460-4155-a971-d2d359e00abe",
-            "x": 1.8883154000000015,
-            "y": -1.9355569000000017
-        },
-        {
-            "token": "8a9028b1-6001-44d6-8fd5-9b6de7b81afb",
-            "x": 1.782763450000001,
-            "y": -1.9305305999999973
-        },
-        {
-            "token": "4ed00cab-8dbc-4dd7-b45a-ef257037a562",
-            "x": 1.7526058000000013,
-            "y": -2.262265300000003
-        },
-        {
-            "token": "411d6679-a530-4e3f-a844-7e90a2b165f6",
-            "x": 1.8832891500000013,
-            "y": -2.2773441499999976
-        },
-        {
-            "token": "5ac1fdfe-c7ee-4fd4-9a66-8cb4797463d7",
-            "x": 1.8782628500000005,
-            "y": -2.6392364999999884
-        },
-        {
-            "token": "603aff6e-7ccf-42b0-ae8a-e11fabc7bc33",
-            "x": -5.882318,
-            "y": 1.0299500500000036
-        },
-        {
-            "token": "768222c3-9318-46ea-92e1-cf04be1debde",
-            "x": -5.540530749999999,
-            "y": 1.0299500500000036
-        },
-        {
-            "token": "4633c46d-aaa6-4387-8205-d5f650e2e247",
-            "x": -5.5355045,
-            "y": 1.0802128500000023
-        },
-        {
-            "token": "74339426-856c-42d5-9510-24abdcc8d0d4",
-            "x": -5.4701628,
-            "y": 1.0802128500000023
-        },
-        {
-            "token": "34202ec2-9076-4a6b-b79b-baddbd16e016",
-            "x": -5.4701628,
-            "y": 1.0299500500000036
-        },
-        {
-            "token": "f13dd534-ff62-46be-a057-7448ac7abdb9",
-            "x": -5.068060149999999,
-            "y": 1.0249237499999921
-        },
-        {
-            "token": "2ea9c078-1e86-4bef-8f35-c256a04323eb",
-            "x": -5.083138999999999,
-            "y": -0.01551680000000033
-        },
-        {
-            "token": "708e7ef6-444a-47dc-a629-d67e2069ec41",
-            "x": -5.842107749999999,
-            "y": -0.03059564999999509
-        },
-        {
-            "token": "4d318835-52cd-4600-b567-2e1ce20b4678",
-            "x": -5.8873443,
-            "y": -0.03059564999999509
-        },
-        {
-            "token": "0dc249ad-faa4-4bda-8c01-7f5af66e4dd0",
-            "x": -5.882318,
-            "y": -0.1059898999999973
-        },
-        {
-            "token": "558ca25c-5d7b-4fd7-82da-f24010b2e5c3",
-            "x": -5.93258085,
-            "y": -0.12609505000000354
-        },
-        {
-            "token": "1378adb7-87ee-43a4-8caf-44c8e6626b5f",
-            "x": -5.92252825,
-            "y": -0.7996169499999937
-        },
-        {
-            "token": "fe9f7ac5-cfdc-42aa-8996-6860838383ec",
-            "x": -5.92755455,
-            "y": -2.7950512500000073
+            "token": "fb69c4a1-cae3-4444-ae8c-f27ce0a0d1d1",
+            "x": 2.997231599999999,
+            "y": -1.2762379000000057
         }
     ],
     "line": [
         {
-            "token": "unused",
+            "token": "b61641dd-b48d-43be-9eb0-572e844282e1",
             "node_tokens": [
-                "unused",
-                "unused",
-                "unused",
-                "unused"
+                "55a17ba7-8e94-42e3-bf82-2474a63a05a9",
+                "41fde9b7-5e8f-49d7-8365-5d71b926a4d9"
             ]
         },
         {
-            "token": "b14ccdec-2a6b-48f9-b9aa-25903338c4b7",
+            "token": "eb05ff08-8433-4671-ab97-742bd1f88cc8",
             "node_tokens": [
-                "dd66eee4-00d2-4ac2-86b3-94bb327a1d64",
-                "4a296676-2c7f-491c-8476-dd40a2c0236b",
-                "76fcf8db-86f9-4d7c-9cfb-9331a01c7eee",
-                "a24f4b4b-09ff-4377-b937-6cfd06ef17f0",
-                "dfb47d1d-0751-480c-80e8-310a7b15612d",
-                "9700a5c6-a5a4-45be-9605-02ff770ab8ef",
-                "3f48b8aa-4460-4155-a971-d2d359e00abe",
-                "8a9028b1-6001-44d6-8fd5-9b6de7b81afb",
-                "4ed00cab-8dbc-4dd7-b45a-ef257037a562",
-                "411d6679-a530-4e3f-a844-7e90a2b165f6",
-                "5ac1fdfe-c7ee-4fd4-9a66-8cb4797463d7"
-            ]
-        },
-        {
-            "token": "e831c73c-65e6-4d8a-b2e8-8e34e047df0b",
-            "node_tokens": [
-                "603aff6e-7ccf-42b0-ae8a-e11fabc7bc33",
-                "768222c3-9318-46ea-92e1-cf04be1debde",
-                "4633c46d-aaa6-4387-8205-d5f650e2e247",
-                "74339426-856c-42d5-9510-24abdcc8d0d4",
-                "34202ec2-9076-4a6b-b79b-baddbd16e016",
-                "f13dd534-ff62-46be-a057-7448ac7abdb9",
-                "2ea9c078-1e86-4bef-8f35-c256a04323eb",
-                "708e7ef6-444a-47dc-a629-d67e2069ec41",
-                "4d318835-52cd-4600-b567-2e1ce20b4678",
-                "0dc249ad-faa4-4bda-8c01-7f5af66e4dd0",
-                "558ca25c-5d7b-4fd7-82da-f24010b2e5c3",
-                "1378adb7-87ee-43a4-8caf-44c8e6626b5f",
-                "fe9f7ac5-cfdc-42aa-8996-6860838383ec"
+                "fa89225c-fd21-46c2-975e-3656a3cb4c43",
+                "fb69c4a1-cae3-4444-ae8c-f27ce0a0d1d1"
             ]
         }
     ],
-    "polygon": [
-        {
-            "token": "unused",
-            "exterior_node_tokens": [
-                "unused",
-                "unused",
-                "unused",
-                "unused",
-                "unused"
-            ],
-            "holes": []
-        }
-    ],
-    "ped_crossing": [
-        {
-            "token": "unused",
-            "polygon_token": "unused",
-            "road_segment_token": null
-        }
-    ],
-    "road_segment": [
-        {
-            "token": "unused",
-            "polygon_token": "unused",
-            "is_intersection": true,
-            "drivable_area_token": ""
-        }
-    ],
-    "lane": [
-        {
-            "token": "unused",
-            "polygon_token": "unused",
-            "lane_type": "CAR",
-            "from_edge_line_token": "unused",
-            "to_edge_line_token": "unused",
-            "left_lane_divider_segments": [
-                {
-                    "node_token": "unused",
-                    "segment_type": "DOUBLE_DASHED_WHITE"
-                },
-                {
-                    "node_token": "unused",
-                    "segment_type": "DOUBLE_DASHED_WHITE"
-                },
-                {
-                    "node_token": "unused",
-                    "segment_type": "DOUBLE_DASHED_WHITE"
-                },
-                {
-                    "node_token": "unused",
-                    "segment_type": "DOUBLE_DASHED_WHITE"
-                }
-            ],
-            "right_lane_divider_segments": []
-        }
-    ],
+    "polygon": [],
     "road_divider": [
         {
-            "token": "unused",
-            "line_token": "unused",
+            "token": "094acb0d-7346-407c-87c9-aba2a5547aae",
+            "line_token": "b61641dd-b48d-43be-9eb0-572e844282e1",
             "road_segment_token": null
         },
         {
-            "token": "ecb5e1df-b538-426c-87a1-2c2804aa5cfa",
-            "line_token": "b14ccdec-2a6b-48f9-b9aa-25903338c4b7",
+            "token": "5d067699-5ee4-4a13-8c62-40991567ad4e",
+            "line_token": "eb05ff08-8433-4671-ab97-742bd1f88cc8",
             "road_segment_token": null
-        },
-        {
-            "token": "79b395e7-da2d-44f9-899b-a2a0102cbddd",
-            "line_token": "e831c73c-65e6-4d8a-b2e8-8e34e047df0b",
-            "road_segment_token": null
-        }
-    ],
-    "lane_divider": [
-        {
-            "token": "unused",
-            "line_token": "unused",
-            "lane_divider_segments": [
-                {
-                    "node_token": "unused",
-                    "segment_type": "DOUBLE_DASHED_WHITE"
-                }
-            ]
-        }
-    ],
-    "road_block": [
-        {
-            "token": "unused",
-            "polygon_token": "unused",
-            "from_edge_line_token": "unused",
-            "to_edge_line_token": "unused",
-            "road_segment_token": "unused"
-        }
-    ],
-    "drivable_area": [
-        {
-            "token": "unused",
-            "polygon_token": "unused",
-            "road_segment_token": null
-        }
-    ],
-    "walkway": [
-        {
-            "token": "unused",
-            "polygon_token": "unused"
-        }
-    ],
-    "stop_line": [
-        {
-            "token": "unused",
-            "polygon_token": "unused",
-            "stop_line_type": "STOP_SIGN",
-            "ped_crossing_tokens": [],
-            "traffic_light_tokens": [],
-            "road_block_token": "unused"
-        }
-    ],
-    "carpark_area": [],
-    "traffic_light": [
-        {
-            "token": "unused",
-            "line_token": "unused",
-            "traffic_light_type": "VERTICAL",
-            "from_road_block_token": "unused",
-            "items": [
-                {
-                    "color": "RED",
-                    "shape": "CIRCLE",
-                    "rel_pos": {
-                        "tx": 0.0,
-                        "ty": 0.0,
-                        "tz": 0.0,
-                        "rx": null,
-                        "ry": null,
-                        "rz": null
-                    },
-                    "to_road_block_tokens": []
-                },
-                {
-                    "color": "YELLOW",
-                    "shape": "CIRCLE",
-                    "rel_pos": {
-                        "tx": 0.0,
-                        "ty": 0.0,
-                        "tz": 0.0,
-                        "rx": null,
-                        "ry": null,
-                        "rz": null
-                    },
-                    "to_road_block_tokens": []
-                },
-                {
-                    "color": "GREEN",
-                    "shape": "CIRCLE",
-                    "rel_pos": {
-                        "tx": 0.0,
-                        "ty": 0.0,
-                        "tz": 0.0,
-                        "rx": null,
-                        "ry": null,
-                        "rz": null
-                    },
-                    "to_road_block_tokens": []
-                }
-            ],
-            "pose": {
-                "tx": 0.0,
-                "ty": 0.0,
-                "tz": 2.4,
-                "rx": 0.0,
-                "ry": 0.0,
-                "rz": 0.0
-            }
-        }
-    ],
-    "arcline_path_3": {
-        "unused": [
-            {
-                "start_pose": [
-                    11693665125060993,
-                    12821674728661665,
-                    17785210304272798
-                ],
-                "end_pose": [
-                    11592420800538075,
-                    1328758413839515,
-                    17988218487570533
-                ],
-                "shape": "LSL",
-                "radius": 999999,
-                "segment_length": [
-                    33636941771581457,
-                    27378115067139017,
-                    16937103851797012
-                ]
-            }
-        ]
-    },
-    "connectivity": {
-        "unused": {
-            "incoming": [
-                "unused"
-            ],
-            "outgoing": [
-                "unused"
-            ]
-        }
-    },
-    "lane_connector": [
-        {
-            "token": "unused",
-            "polygon_token": "unused"
         }
     ],
     "canvas_edge": [
