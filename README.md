@@ -1,14 +1,25 @@
 QGIS2Nuscenes map format
 
-### python后处理对齐坐标系,QGIS2ROS
+# python后处理对齐坐标系,QGIS2ROS
+    ## 坐标系记录
+        ### 地图
+            - QGIS地图，左上角原点，x右y下
+            - ROS地图，左下角原点，x右y上
+        ### 世界坐标系
+            - ROS世界和issac sim世界坐标系， x前y左
+            - NuscenesBEV，y前x右
 
     ## 将 QGIS 坐标系转换为 ROS 的 origin 坐标系。
-        - QGIS：Y 轴向下，左上角为原点
-        - ROS：Y 轴向上，左下角为原点
+        - QGIS地图：Y 轴向下，左上角为原点
+        - ROS地图：Y 轴向上，左下角为原点
         - 真实的 pose（米为单位）用 pixel 乘以 ros 的 resolution
-        - ROS坐标系原点转到origin
+        - ROS地图坐标系原点转到origin
+        - ROS地图坐标系转ROS世界坐标系
 
-### VAD需要的nuscenes的格式
+    ## 再将ROS坐标系转为NuscenesBEV坐标系
+        - ROS世界和issac sim世界坐标系 ---> NuscenesBEV坐标系
+
+# VAD需要的nuscenes的格式
 
     ## VAD涉及的nuscenes gt语义层
 
@@ -27,10 +38,10 @@ QGIS2Nuscenes map format
         - Divider（分割）：通过nuscenes的'road_divider', 'lane_divider'得来
         - Ped_crossing（人行路）：通过nuscenes的'ped_crossing'得来
 
-### RobotAD
+# RobotAD
     ## RobotAD主要关注boundary，所以标注contour类型，contour类型中选取road_divider，仅road_divider会被标注(line type)
 
-### geojson转换nuscenes的格式
+# geojson转换nuscenes的格式
     ## nuscenes的几何格式：
         - node: 最基础的元素，包含x,y坐标信息
         - line：两个node连接组成

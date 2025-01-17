@@ -3,7 +3,7 @@ import cv2
 # 设置你连接的多个摄像头的索引
 # 摄像头的索引通常是从0开始的
 # 如果你有多个USB摄像头，可能需要尝试更高的索引号（比如1, 2, 3等）
-camera_indices = [1, 2, 3, 4, 5]  # 假设你有两个摄像头
+camera_indices = [1]  # 假设你有两个摄像头
 
 # 创建视频捕捉对象的列表
 cameras = [cv2.VideoCapture(index) for index in camera_indices]

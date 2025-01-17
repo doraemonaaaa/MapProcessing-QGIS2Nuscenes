@@ -13,7 +13,10 @@ import math
 ros2issac_axis_mapping = (180, 180)
 
 class Geojson2Nuscenesjson:
-    def __init__(self, resolution, origin, image_height, image_width, axis_mapping=ros2issac_axis_mapping):
+    def __init__(self, 
+                 resolution, origin, image_height, image_width, 
+                 axis_mapping=ros2issac_axis_mapping,
+                 ):
         """
         初始化语义层和数据结构。
         参数:
@@ -44,7 +47,7 @@ class Geojson2Nuscenesjson:
         # - qgis默认x右y下，图片左上角
         # - ROS默认x右y上，图片左下角
         # - issac或者real world随机
-        # axis_mapping 用于 ros -> issac 坐标系方向
+        # - axis_mapping 用于 ros -> issac 坐标系方向
         self.axis_mapping = axis_mapping
 
     def transform_point(self, x, y, coord):
@@ -56,6 +59,9 @@ class Geojson2Nuscenesjson:
         - 真实的 pose（米为单位）用 pixel 乘以 ros 的 resolution
         - ROS坐标系原点转到origin
         - ROS--->Issac或者real world的coordinate方向
+        
+        再将世界坐标转为bev坐标
+        - Issac或者real world ---> BEV(和QGIS一样)
         """
         if coord:
             x_qgis, y_qgis = coord
@@ -79,6 +85,7 @@ class Geojson2Nuscenesjson:
         # 应用旋转矩阵公式
         x_transformed = x_ros_real * math.cos(theta_x) - y_ros_real * math.sin(theta_x)
         y_transformed = x_ros_real * math.sin(theta_y) + y_ros_real * math.cos(theta_y)
+        
         return [x_transformed, y_transformed]
 
     def generate_token(self):
