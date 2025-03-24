@@ -1,20 +1,73 @@
-import geojson
 import json
 import uuid
-from shapely.geometry import shape
-import geopandas as gpd
-import numpy as np
 import yaml
 from PIL import Image  # 用于读取图像
 import os
 import math
 
-# x, y
-ros2issac_axis_mapping = (180, 180)
+
+# - qgis默认x右y下，图片左上角
+# - ISAAC默认x右y上，图片左下角
+# - ROS地图图片为(x右，y上)，右上角为坐标原点
+
+# x, y, 将ISSAC图片/ROS图片里面的坐标系（x右y上）/(x右y上)转换为实际issac里面的右手坐标系（未知，实际情况）,正值逆时针旋转（右手定则）
+# full_warehouse = (180, 180) # Isaac
+# AIR_F1 = (135, 135) # ROS
+# AIR_B1 = (-5， -5) # ROS
+# AIR_G = (45, 45 # ROS)
+# AIR_F11 = (155, 155) # ROS
+ros2issac_axis_mapping = (155, 155)  # ROS以ROS图片的进行调整, ISAAC以ISAAC图片进行调整epoch_name = "20250122_192629"
+epoch_name = "20250122_192629"
+map_name = "AIR_F11"
+IS_ROS = True
+
+# 配置文件
+# dataset
+dataset_foldet = r'data/Dataset/' + epoch_name  # 根路径
+pose_in_image_json_path = r'data/pose_in_image/' + epoch_name + '/pose_in_image.json'  # 根路径
+lidar_folder = dataset_foldet + r'/samples/LIDAR_TOP'
+sample_data_path = dataset_foldet + r'/sample_data.json'
+sample_json_path = dataset_foldet + r'/sample.json'
+ego_pose_path = dataset_foldet + r'/ego_pose.json'
+
+# map
+resource_root = 'resource/' + map_name + '/'
+geojson_input = resource_root + 'road_divider.geojson'  # 替换为您的GeoJSON文件路径
+ros_yaml_input = resource_root + map_name + '.yaml'
+template_path = 'template/unused_template.json'
+
+ego_pose_output_path = "data/ego_pose.json"
+
+def find_json_with_key(search_key, search_value, json_datas)-> json:
+
+    # 查找包含指定键值对的JSON对象
+    result = None
+    for obj in json_datas:
+        if obj.get(search_key) == search_value:
+            result = obj
+            break
+        
+    return result
+
+def find_all_json_with_key(search_key, search_value, json_datas):
+    """
+    查找所有包含指定键值对的 JSON 对象，并提取指定字段的值。
+
+    参数:
+        search_key (str): 要查找的键。
+        search_value (any): 要匹配的值。
+        json_datas (list): 包含多个 JSON 对象的列表。
+
+    返回:
+        list: 包含所有匹配 JSON 对象的列表。
+    """
+    # 查找所有匹配的 JSON 对象
+    matched_jsons = [obj for obj in json_datas if obj.get(search_key) == search_value]
+    return matched_jsons
 
 class Geojson2Nuscenesjson:
     def __init__(self, 
-                 resolution, origin, image_height, image_width, 
+                 resolution, origin, image_height, image_width, is_ros=IS_ROS,
                  axis_mapping=ros2issac_axis_mapping,
                  ):
         """
@@ -25,7 +78,6 @@ class Geojson2Nuscenesjson:
         - image_height: 图像高度（像素数）
         - image_width: 图像宽度（像素数）
         """
-        # 修正拼写错误："road_divider" 而不是 "road_divder"
         self.nuscenes_semantic_layers = (
             "road_divider", "lane_divider", "road_segment", "lane", "ped_crossing"
         )
@@ -45,17 +97,20 @@ class Geojson2Nuscenesjson:
         
         # 用于将qgis的坐标系方向对齐到issac的坐标系方向，角度顺时针为正旋转，数据结构：(x轴旋转方向，y轴旋转方向)，进行qgis->ros->issac or real_world
         # - qgis默认x右y下，图片左上角
-        # - ROS默认x右y上，图片左下角
-        # - issac或者real world随机
+        # - ROS默认x右y上，图片右上角
+        # - ISAAC默认x右y上，图片左下角
+        # - issac或者real world原点旋转随机按照实际情况来
         # - axis_mapping 用于 ros -> issac 坐标系方向
         self.axis_mapping = axis_mapping
+        self.is_ros = is_ros
 
     def transform_point(self, x, y, coord):
         """
-        将 QGIS 坐标系转换为 ROS 的 origin 坐标系。
-        再将 ROS 坐标转换为 Issac 或 real world 坐标（基于 self.axis_mapping）。
-        - QGIS：Y 轴向下，左上角为原点
-        - ROS：Y 轴向上，左下角为原点
+        将 QGIS/普通图像 坐标系转换为 ROS/Isaac 的 origin 坐标系。
+        再将 ROS/Isaac 坐标转换为 Issac 或 real world 坐标（基于 self.axis_mapping）。
+        - qgis默认x右y上，图片左上角
+        - ROS默认x左y下，图片左下角
+        - ISAAC默认x右y上，图片左下角
         - 真实的 pose（米为单位）用 pixel 乘以 ros 的 resolution
         - ROS坐标系原点转到origin
         - ROS--->Issac或者real world的coordinate方向
@@ -67,24 +122,44 @@ class Geojson2Nuscenesjson:
             x_qgis, y_qgis = coord
         else:
             x_qgis, y_qgis = x, y
-        ### Step 1: QGIS -> ROS
-        # 翻转 Y 轴（QGIS 的 Y 轴向下，ROS 的 Y 轴向上）
-        y_flipped = self.image_height + y_qgis
-        # 像素转换到实际世界尺度
-        x_ros = x_qgis * self.resolution
-        y_ros = y_flipped * self.resolution
-        # 将 ROS 坐标系原点移到 origin, origin是真实尺度
-        x_ros_real = x_ros - self.origin_x
-        y_ros_real = y_ros - self.origin_y
-        
-        ### Step 2: ROS -> Issac/real world
-        # 应用 self.axis_mapping（角度旋转）
-        x_rotation, y_rotation = self.axis_mapping  # 获取 X 和 Y 轴的旋转角度（以度为单位）
-        theta_x = math.radians(x_rotation)  # 将角度转换为弧度
-        theta_y = math.radians(y_rotation)  # 将角度转换为弧度
-        # 应用旋转矩阵公式
-        x_transformed = x_ros_real * math.cos(theta_x) - y_ros_real * math.sin(theta_x)
-        y_transformed = x_ros_real * math.sin(theta_y) + y_ros_real * math.cos(theta_y)
+            
+        if self.is_ros:  # ROS地图yaml
+            ### Step 1: QGIS -> ROS
+            # 翻转 Y 轴（QGIS 的 Y 轴向下，ROS 的 Y 轴向上）
+            y_flipped = self.image_height + y_qgis
+            # 像素转换到实际世界尺度（ROS的分辨率是每个像素对应多少米）
+            x_ros = x_qgis * self.resolution
+            y_ros = y_flipped * self.resolution
+            # 将 ROS 坐标系原点移到 origin
+            x_ros_real = x_ros + self.origin_x
+            y_ros_real = y_ros + self.origin_y
+            ### Step 2: Isaac -> Isaac/real world
+            # 应用 self.axis_mapping（角度旋转）
+            x_rotation, y_rotation = self.axis_mapping  # 获取 X 和 Y 轴的旋转角度（以度为单位）
+            theta_x = math.radians(x_rotation)  # 将角度转换为弧度
+            theta_y = math.radians(y_rotation)  # 将角度转换为弧度
+            # 应用旋转矩阵公式
+            x_transformed = x_ros_real * math.cos(theta_x) - y_ros_real * math.sin(theta_x)
+            y_transformed = x_ros_real * math.sin(theta_y) + y_ros_real * math.cos(theta_y)
+        else: #isaac地图yaml
+            ### Step 1: QGIS -> Isaac
+            # 翻转 Y 轴（QGIS 的 Y 轴向下，Isaac 的 Y 轴向上）
+            y_flipped = self.image_height + y_qgis
+            # 像素转换到实际世界尺度
+            x_isaac = x_qgis * self.resolution
+            y_isaac = y_flipped * self.resolution
+            # 将 Isaac 坐标系原点移到 origin, origin是真实尺度
+            x_isaac_real = x_isaac - self.origin_x
+            y_isaac_real = y_isaac - self.origin_y
+            
+            ### Step 2: Isaac -> Issac/real world
+            # 应用 self.axis_mapping（角度旋转）
+            x_rotation, y_rotation = self.axis_mapping  # 获取 X 和 Y 轴的旋转角度（以度为单位）
+            theta_x = math.radians(x_rotation)  # 将角度转换为弧度
+            theta_y = math.radians(y_rotation)  # 将角度转换为弧度
+            # 应用旋转矩阵公式
+            x_transformed = x_isaac_real * math.cos(theta_x) - y_isaac_real * math.sin(theta_x)
+            y_transformed = x_isaac_real * math.sin(theta_y) + y_isaac_real * math.cos(theta_y)
         
         return [x_transformed, y_transformed]
 
@@ -251,7 +326,8 @@ class Geojson2Nuscenesjson:
                             'token': self.generate_token(),
                             'polygon_token': token,
                             'is_intersection': properties.get('is_intersection', False),
-                            'drivable_area_token': properties.get('drivable_area_token', token)  # 改为实际的多边形 token
+                            #'drivable_area_token': properties.get('drivable_area_token', token)  # 改为实际的多边形 token
+                            'drivable_area_token': ""
                         }
                         self.semantic_data[semantic_type].append(semantic_entry)
                 elif semantic_type == 'lane':
@@ -381,21 +457,22 @@ class Geojson2Nuscenesjson:
             json.dump(combined_map, f, indent=4)
 
         print(f"Conversion complete. NuScenesMap JSON saved to {output_path}")
+        
+    def get_world_position(self, x, y):
+        return self.transform_point(x, y)
+        
+        
 
 def load_yaml(file_path):
     """
     读取 YAML 配置文件
     """
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         config = yaml.safe_load(file)
     return config
 
 # 示例使用
-if __name__ == "__main__":
-    geojson_input = 'road_divider.geojson'  # 替换为您的GeoJSON文件路径
-    ros_yaml_input = 'office_occupancy_map_coordinate.yaml'
-    nuscenes_output = 'output_nuscenes_map.json'  # 替换为您希望保存的JSON文件路径
-    
+if __name__ == "__main__":    
     # 加载 YAML 配置文件
     config = load_yaml(ros_yaml_input)
     
@@ -421,6 +498,101 @@ if __name__ == "__main__":
         resolution=resolution,
         origin=origin,
         image_height=image_height,
-        image_width=image_width  # 新增的参数
+        image_width=image_width
     )
-    converter.convert(geojson_input, nuscenes_output)
+
+    lidar_file_names = os.listdir(lidar_folder)
+    # 加载 sample_data.json 文件
+    with open(sample_data_path, 'r', encoding='utf-8') as f:
+        sample_data_json_data = json.load(f)
+    # 加载 sample.json 文件
+    with open(sample_json_path, 'r', encoding='utf-8') as f:
+        sample_json_data = json.load(f)
+    # 加载 ego_pose.json 文件
+    with open(ego_pose_path, 'r', encoding='utf-8') as f:
+        ego_pose_json_data = json.load(f)
+        
+    # 排序雷达文件名
+    lidar_file_names_sorted = sorted(  # 提取时间戳并排序（按主时间戳和次时间戳组成的元组排序）
+        lidar_file_names,
+        key=lambda x: tuple(map(int, x.split("__")[-1].split(".")[0].split("_")))
+    )
+    # for idx, filename in enumerate(lidar_file_names_sorted):  # 打印排序结果（序号从0开始）
+    #     print(f"Index {idx}: {filename}")
+
+    try:
+        with open(pose_in_image_json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Error in file: {pose_in_image_json_path}")
+        print(f"Error details: {e}")
+        with open(pose_in_image_json_path, 'r', encoding='utf-8') as f:
+            print(f"File content: {f.read()}")
+        raise  # 重新抛出异常，终止程序
+        
+    lidar_file_numbers_and_poses = {}
+    if data:
+        for entry in data:
+            lidar_file_name = entry.get("lidar_file_name")
+            pose_in_map_pixel = entry.get("pose_in_map_pixel")
+            
+            if not lidar_file_name or not pose_in_map_pixel:
+                raise ValueError("Lidar file or pose_in_map_pixel not found")
+            else:
+                # 提取数字部分并转换为整数
+                lidar_file_number = int(''.join(filter(str.isdigit, lidar_file_name)))
+                # 将 lidar_file_number 作为键，pose_in_map_pixel 作为值存储到字典中
+                lidar_file_numbers_and_poses[lidar_file_number] = pose_in_map_pixel
+                
+    ego_pose_json_data_changed = []
+    for lidar_file_number, pose_in_map_pixel in lidar_file_numbers_and_poses.items():
+        
+        lidar_file_name = lidar_file_names_sorted[lidar_file_number]
+        
+        '''BUG'''
+        # 由于数据的bug，将_转换为:,__不被替换
+        # 先将 '__' 替换为一个临时标记，比如 '__TEMP__'
+        temp_file_name = lidar_file_name.replace("__", "'")
+        # 然后将单个 '_' 替换为 ':'
+        corrected_file_name = temp_file_name.replace("_", ":")
+        # 最后将临时标记 '__TEMP__' 替换回 '__'
+        corrected_file_name = corrected_file_name.replace("'", "__") 
+        s = corrected_file_name
+        # 1. 从后往前查找最后两个 ':'，并替换倒数两个 ':'
+        parts = s.rsplit(":", 2)
+        if len(parts) >= 3:
+            s = ":".join(parts[:-2]) + "_" + parts[-2] + "_" + parts[-1]
+        # 2. 然后将第一个 ':' 替换为 '_'
+        first_colon_index = s.find(":")
+        if first_colon_index != -1:
+            s = s[:first_colon_index] + "_" + s[first_colon_index+1:]
+        corrected_file_name = s
+
+        # 获得sample_data_token from LIDAR filename
+        corr_sample_data_json = find_json_with_key("filename", corrected_file_name, sample_data_json_data)
+        #print(annotation_json_obj)
+        sample_token = corr_sample_data_json["sample_token"]
+        #print(sample_token)
+        corr_sample_json = find_json_with_key("token", sample_token, sample_json_data)
+        
+        # 寻找这个sample里面所有的json
+        sample_jsons = find_all_json_with_key("sample_token", corr_sample_json, sample_data_json_data)
+        ego_pose_tokens = [obj.get("ego_pose_token") for obj in sample_jsons]
+        
+        # 根据位置像素计算世界坐标
+        image_x = pose_in_map_pixel[0]
+        image_y = pose_in_map_pixel[1]
+        x_world, y_world = converter.get_world_position(image_x, image_y)  # get world postion from image
+        
+        # 修复所有的ego_pose
+        for ego_pose_token in ego_pose_tokens:
+            ego_pose_json = find_json_with_key("token", ego_pose_token, ego_pose_json_data)
+            if ego_pose_json:
+                ego_pose_json["translation"] = [x_world, y_world, 0]  # 更新 translation 字段
+                ego_pose_json_data_changed.append(ego_pose_json)
+            else:
+                print(f"未找到 token 为 {ego_pose_token} 的 ego_pose 数据")
+                
+    with open(ego_pose_path, 'w', encoding='utf-8') as f:
+        json.dump(ego_pose_json_data_changed, f, ensure_ascii=False, indent=4)
+    
